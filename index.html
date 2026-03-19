@@ -10,7 +10,7 @@
             --secondary: #00b894;
             --accent: #fd79a8;
             --danger: #d63031;
-            --bg: #fdf2f7; /* Um fundinho levemente rosado */
+            --bg: #fdf2f7;
         }
 
         body { 
@@ -23,18 +23,8 @@
             align-items: center;
         }
 
-        /* Título Principal */
-        .loja-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .loja-header h1 {
-            color: var(--accent);
-            font-size: 2.2rem;
-            margin: 0;
-            text-shadow: 2px 2px 0px #fff;
-        }
+        .loja-header { text-align: center; margin-bottom: 20px; }
+        .loja-header h1 { color: var(--accent); font-size: 2.2rem; margin: 0; text-shadow: 2px 2px 0px #fff; }
 
         .card {
             background: white;
@@ -45,98 +35,72 @@
             padding: 20px;
             margin-bottom: 20px;
             box-sizing: border-box;
-            border: 2px solid #fff;
+            position: relative;
         }
 
-        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
+        h2 { color: var(--primary); margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
         
         .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        input { padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-size: 16px; width: 100%; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--accent); }
+        input { padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-size: 16px; width: 100%; box-sizing: border-box; outline: none; }
         
         .btn-save { 
-            background: var(--accent); 
-            color: white; 
-            padding: 15px; 
-            width: 100%; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            font-size: 16px;
-            cursor: pointer;
+            background: var(--accent); color: white; padding: 15px; width: 100%; border: none; 
+            border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer;
             box-shadow: 0 4px 0 #e84393;
         }
-        .btn-save:active { transform: translateY(2px); box-shadow: 0 2px 0 #e84393; }
 
-        .shelf { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-            gap: 10px; 
-            margin-top: 20px; 
-        }
+        .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; }
 
-        .product-btn { 
-            background: #fff; 
-            padding: 15px 10px; 
-            border-radius: 12px; 
-            cursor: pointer;
-            border: 2px solid #f1f2f6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .product-btn:active { 
-            transform: scale(0.92); 
-            background: #e8f8f5;
-            border-color: var(--secondary);
-        }
-
-        .product-btn strong { color: #2d3436; margin-bottom: 5px; pointer-events: none; }
-        .product-btn span { font-size: 13px; color: var(--secondary); font-weight: bold; pointer-events: none; }
-
-        .receipt { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .receipt td { padding: 12px 5px; border-bottom: 1px dashed #dfe6e9; font-size: 16px; }
+        /* Botão do Produto com opção de remover */
+        .product-container { position: relative; }
         
+        .product-btn { 
+            background: #fff; padding: 15px 5px; border-radius: 12px; cursor: pointer;
+            border: 2px solid #f1f2f6; display: flex; flex-direction: column; align-items: center;
+            transition: all 0.2s ease; width: 100%; box-sizing: border-box;
+        }
+        .product-btn:active { transform: scale(0.95); background: #e8f8f5; }
+
+        .remove-prod {
+            position: absolute; top: -5px; right: -5px; background: var(--danger);
+            color: white; border-radius: 50%; width: 22px; height: 22px;
+            font-size: 12px; border: 2px solid white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+
+        /* Tabela de Vendas */
+        .receipt { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .receipt td { padding: 10px 5px; border-bottom: 1px dashed #dfe6e9; }
+        .btn-del-item { color: var(--danger); cursor: pointer; font-weight: bold; padding: 5px; }
+
         .total-row { 
-            font-size: 28px; 
-            font-weight: bold; 
-            text-align: right; 
-            margin-top: 20px; 
-            color: #2d3436;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
+            font-size: 28px; font-weight: bold; text-align: right; margin-top: 20px; 
+            color: #2d3436; background: #f8f9fa; padding: 15px; border-radius: 10px;
             border-left: 5px solid var(--secondary);
         }
 
-        .btn-clear { background: var(--danger); color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-clear { background: var(--primary); color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="loja-header">
         <h1>🍓 Mercado da Júlia 🍭</h1>
-        <p style="margin: 5px 0; color: #636e72;">Seja bem-vindo(a) à nossa loja!</p>
     </div>
 
     <div class="card">
         <h2>📦 Abastecer Prateleiras</h2>
         <div class="grid-input">
-            <input type="text" id="reg-nome" placeholder="Nome do item">
-            <input type="number" id="reg-preco" placeholder="Preço R$">
+            <input type="text" id="reg-nome" placeholder="Produto">
+            <input type="number" id="reg-preco" placeholder="R$">
         </div>
-        <button class="btn-save" onclick="cadastrarNoEstoque()">Colocar na Loja +</button>
+        <button class="btn-save" onclick="cadastrarNoEstoque()">Colocar na Vitrine +</button>
         
-        <div class="shelf" id="prateleira">
-            </div>
+        <div class="shelf" id="prateleira"></div>
     </div>
 
     <div class="card">
-        <h2>💰 Cupom Fiscal (Caixa)</h2>
+        <h2>💰 Cupom Fiscal</h2>
         <table class="receipt">
             <tbody id="carrinho-corpo"></tbody>
         </table>
@@ -145,7 +109,7 @@
             Total: R$ <span id="total-venda">0.00</span>
         </div>
 
-        <button class="btn-clear" onclick="novaVenda()">Finalizar Venda 🛍️</button>
+        <button class="btn-clear" onclick="novaVenda()">Próximo Cliente 🛍️</button>
     </div>
 
     <script>
@@ -157,34 +121,51 @@
             const nome = nomeInput.value.trim();
             const preco = parseFloat(precoInput.value);
 
-            if (nome === '' || isNaN(preco)) {
-                alert("Júlia, coloque o nome e o preço do produto! 😊");
-                return;
-            }
+            if (!nome || isNaN(preco)) return;
 
             const prateleira = document.getElementById('prateleira');
-            const btn = document.createElement('div');
-            btn.className = 'product-btn';
-            btn.onclick = function() { adicionarAoCarrinho(nome, preco); };
-            btn.innerHTML = `<strong>${nome}</strong><span>R$ ${preco.toFixed(2)}</span>`;
             
-            prateleira.appendChild(btn);
-            nomeInput.value = '';
-            precoInput.value = '';
-            nomeInput.focus();
+            const container = document.createElement('div');
+            container.className = 'product-container';
+            
+            container.innerHTML = `
+                <button class="remove-prod" onclick="this.parentElement.remove()">X</button>
+                <div class="product-btn" onclick="adicionarAoCarrinho('${nome}', ${preco})">
+                    <strong>${nome}</strong>
+                    <span style="color:var(--secondary)">R$ ${preco.toFixed(2)}</span>
+                </div>
+            `;
+            
+            prateleira.appendChild(container);
+            nomeInput.value = ''; precoInput.value = ''; nomeInput.focus();
         }
 
         function adicionarAoCarrinho(nome, preco) {
             const corpo = document.getElementById('carrinho-corpo');
             const row = corpo.insertRow();
-            row.innerHTML = `<td style="width: 60%"><strong>${nome}</strong></td><td style="width: 40%; text-align: right;">R$ ${preco.toFixed(2)}</td>`;
+            
+            row.innerHTML = `
+                <td onclick="removerItemCarrinho(this, ${preco})" class="btn-del-item">✕</td>
+                <td style="width: 60%"><strong>${nome}</strong></td>
+                <td style="width: 40%; text-align: right;">R$ ${preco.toFixed(2)}</td>
+            `;
 
-            totalGeral += preco;
+            atualizarTotal(preco);
+        }
+
+        function removerItemCarrinho(celula, preco) {
+            celula.parentElement.remove();
+            atualizarTotal(-preco);
+        }
+
+        function atualizarTotal(valor) {
+            totalGeral += valor;
+            if (totalGeral < 0) totalGeral = 0;
             document.getElementById('total-venda').innerText = totalGeral.toFixed(2);
         }
 
         function novaVenda() {
-            if(confirm("Deseja fechar a conta do cliente e começar outra?")) {
+            if(confirm("Limpar cupom para o próximo cliente?")) {
                 document.getElementById('carrinho-corpo').innerHTML = '';
                 totalGeral = 0;
                 document.getElementById('total-venda').innerText = '0.00';
