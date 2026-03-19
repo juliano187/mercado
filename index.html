@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Mercado da Júlia 🛒</title>
+    <link rel="icon" href="https://fav.farm/🛒" />
+
+    <meta property="og:title" content="Mercado da Júlia 🛒" />
+    <meta property="og:description" content="O mercadinho mais fofo da cidade! Brinque de vender e calcular troco." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://img.icons8.com/fluency/240/shopping-cart.png" />
+    <meta property="og:image:width" content="240" />
+    <meta property="og:image:height" content="240" />
+    <meta property="og:url" content="https://mercadodajulia.brincadeira" />
+
     <style>
         :root {
             --primary: #6c5ce7;
@@ -22,8 +33,10 @@
         
         .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         input { padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-size: 16px; width: 100%; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--accent); }
         
         .btn-save { background: var(--accent); color: white; padding: 15px; width: 100%; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 0 #e84393; }
+        .btn-save:active { transform: translateY(2px); box-shadow: 0 2px 0 #e84393; }
 
         .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; }
         .product-container { position: relative; }
@@ -35,7 +48,6 @@
         .receipt td { padding: 10px 5px; border-bottom: 1px dashed #dfe6e9; }
         .btn-del-item { color: var(--danger); cursor: pointer; font-weight: bold; width: 30px; }
 
-        /* Área de Pagamento */
         .payment-area { background: #f8f9fa; border-radius: 15px; padding: 15px; margin-top: 20px; border-left: 5px solid var(--secondary); }
         .row-money { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .row-money label { font-weight: bold; color: #444; }
@@ -52,115 +64,4 @@
         <h1>🍓 Mercado da Júlia 🍭</h1>
     </div>
 
-    <div class="card">
-        <h2>📦 Abastecer Prateleiras</h2>
-        <div class="grid-input">
-            <input type="text" id="reg-nome" placeholder="Produto">
-            <input type="number" id="reg-preco" placeholder="R$">
-        </div>
-        <button class="btn-save" onclick="cadastrarNoEstoque()">Colocar na Vitrine +</button>
-        <div class="shelf" id="prateleira"></div>
-    </div>
-
-    <div class="card">
-        <h2>💰 Cupom Fiscal</h2>
-        <table class="receipt">
-            <tbody id="carrinho-corpo"></tbody>
-        </table>
-        
-        <div class="payment-area">
-            <div class="row-money">
-                <label>TOTAL DA COMPRA:</label>
-                <span id="total-venda">R$ 0.00</span>
-            </div>
-            
-            <div class="row-money">
-                <label>DINHEIRO RECEBIDO:</label>
-                <input type="number" id="pago" class="input-money" placeholder="0.00" oninput="calcularTroco()">
-            </div>
-
-            <div class="row-money" style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
-                <label>TROCO:</label>
-                <span id="troco-valor" class="troco-text">R$ 0.00</span>
-            </div>
-        </div>
-
-        <button class="btn-clear" onclick="novaVenda()">Próximo Cliente 🛍️</button>
-    </div>
-
-    <script>
-        let totalGeral = 0;
-
-        function cadastrarNoEstoque() {
-            const nomeInput = document.getElementById('reg-nome');
-            const precoInput = document.getElementById('reg-preco');
-            const nome = nomeInput.value.trim();
-            const preco = parseFloat(precoInput.value);
-
-            if (!nome || isNaN(preco)) return;
-
-            const prateleira = document.getElementById('prateleira');
-            const container = document.createElement('div');
-            container.className = 'product-container';
-            
-            container.innerHTML = `
-                <button class="remove-prod" onclick="this.parentElement.remove()">X</button>
-                <div class="product-btn" onclick="adicionarAoCarrinho('${nome}', ${preco})">
-                    <strong>${nome}</strong>
-                    <span style="color:var(--secondary)">R$ ${preco.toFixed(2)}</span>
-                </div>
-            `;
-            
-            prateleira.appendChild(container);
-            nomeInput.value = ''; precoInput.value = ''; nomeInput.focus();
-        }
-
-        function adicionarAoCarrinho(nome, preco) {
-            const corpo = document.getElementById('carrinho-corpo');
-            const row = corpo.insertRow();
-            row.innerHTML = `
-                <td onclick="removerItemCarrinho(this, ${preco})" class="btn-del-item">✕</td>
-                <td style="width: 60%"><strong>${nome}</strong></td>
-                <td style="width: 40%; text-align: right;">R$ ${preco.toFixed(2)}</td>
-            `;
-            atualizarTotal(preco);
-        }
-
-        function removerItemCarrinho(celula, preco) {
-            celula.parentElement.remove();
-            atualizarTotal(-preco);
-        }
-
-        function atualizarTotal(valor) {
-            totalGeral += valor;
-            if (totalGeral < 0) totalGeral = 0;
-            document.getElementById('total-venda').innerText = `R$ ${totalGeral.toFixed(2)}`;
-            calcularTroco(); // Recalcula o troco sempre que o total mudar
-        }
-
-        function calcularTroco() {
-            const pago = parseFloat(document.getElementById('pago').value) || 0;
-            const troco = pago - totalGeral;
-            const trocoDisplay = document.getElementById('troco-valor');
-            
-            if (troco > 0) {
-                trocoDisplay.innerText = `R$ ${troco.toFixed(2)}`;
-                trocoDisplay.style.color = "#00b894"; // Verde se tiver troco
-            } else {
-                trocoDisplay.innerText = `R$ 0.00`;
-                trocoDisplay.style.color = "#d63031"; // Vermelho se faltar dinheiro
-            }
-        }
-
-        function novaVenda() {
-            if(confirm("Limpar cupom para o próximo cliente?")) {
-                document.getElementById('carrinho-corpo').innerHTML = '';
-                document.getElementById('pago').value = '';
-                totalGeral = 0;
-                document.getElementById('total-venda').innerText = 'R$ 0.00';
-                document.getElementById('troco-valor').innerText = 'R$ 0.00';
-            }
-        }
-    </script>
-</body>
-</html>
+    <div class="
