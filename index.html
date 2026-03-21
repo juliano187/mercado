@@ -7,9 +7,6 @@
     <meta property="og:description" content="O mercadinho mais fofo da cidade! Brinque de vender e calcular troco." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://img.icons8.com/fluency/240/shopping-cart.png" />
-    <meta property="og:image:width" content="240" />
-    <meta property="og:image:height" content="240" />
-    <meta property="og:url" content="https://mercadodajulia.brincadeira" />
     <title>Mercado da Júlia 🛒</title>
     
     <link rel="icon" href="https://fav.farm/🛒" />
@@ -21,6 +18,7 @@
             --accent: #fd79a8;
             --danger: #d63031;
             --bg: #fdf2f7;
+            --card-blue: #3498db;
         }
 
         body { 
@@ -86,7 +84,15 @@
         .row-money span { font-size: 1.3rem; font-weight: bold; color: #2d3436; }
         .input-money { width: 100px; text-align: right; border: 2px solid var(--secondary); padding: 8px; border-radius: 8px; font-size: 1rem; font-weight: bold; }
         
+        .btn-card {
+            background: var(--card-blue); color: white; width: 100%; padding: 12px; margin-top: 10px;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-card:disabled { background: #bdc3c7; cursor: not-allowed; }
+
         .btn-clear { background: var(--primary); color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        #status-cartao { font-size: 0.85rem; text-align: center; margin-top: 8px; font-weight: bold; min-height: 1.2rem; }
     </style>
 </head>
 <body>
@@ -124,6 +130,9 @@
                 <label>TROCO:</label>
                 <span id="troco-valor" style="color: var(--danger)">R$ 0.00</span>
             </div>
+
+            <button id="btn-cartao" class="btn-card" onclick="pagarComCartao()">💳 Pagar com Cartão</button>
+            <div id="status-cartao"></div>
         </div>
 
         <button class="btn-clear" onclick="novaVenda()">Próximo Cliente 🛍️</button>
@@ -131,6 +140,61 @@
 
     <script>
         let totalGeral = 0;
+
+        // Função para gerar o som de "Beep" sem arquivos externos
+        function tocarBeep() {
+            try {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+
+                oscillator.type = "sine"; 
+                oscillator.frequency.value = 880; 
+                gainNode.gain.setValueAtTime(0.1, context.currentTime);
+
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 200);
+            } catch (e) {
+                console.log("Áudio não suportado ou bloqueado pelo navegador");
+            }
+        }
+
+        function pagarComCartao() {
+            if (totalGeral <= 0) {
+                alert("Júlia, o carrinho está vazio! 🛒");
+                return;
+            }
+
+            const btn = document.getElementById('btn-cartao');
+            const status = document.getElementById('status-cartao');
+
+            btn.disabled = true;
+            btn.innerText = "⏳ Processando...";
+            status.innerText = "Aproxime o cartão na maquininha...";
+            status.style.color = "#7f8c8d";
+
+            // Espera 5 segundos
+            setTimeout(() => {
+                tocarBeep(); 
+                
+                btn.innerText = "✅ Aprovado!";
+                btn.style.background = "var(--secondary)";
+                status.innerText = "Pagamento concluído com sucesso!";
+                status.style.color = "var(--secondary)";
+
+                // Reseta o botão após um tempo para a próxima venda
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "💳 Pagar com Cartão";
+                    btn.style.background = "var(--card-blue)";
+                    status.innerText = "";
+                }, 3000);
+
+            }, 5000); 
+        }
 
         function cadastrarNoEstoque() {
             const nomeInput = document.getElementById('reg-nome');
@@ -203,6 +267,7 @@
                 totalGeral = 0;
                 document.getElementById('total-venda').innerText = 'R$ 0.00';
                 document.getElementById('troco-valor').innerText = 'R$ 0.00';
+                document.getElementById('status-cartao').innerText = '';
             }
         }
     </script>
