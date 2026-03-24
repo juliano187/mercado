@@ -3,125 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Mercado da Júlia 🛒" />
+    <meta property="og:description" content="O mercadinho mais fofo da cidade! Brinque de vender e calcular troco." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://img.icons8.com/fluency/240/shopping-cart.png" />
+    <title>Mercado da Júlia 🛒</title>
     
-    <title>Mercado da Júlia - Frescor na sua mesa</title>
-    <meta property="og:title" content="Mercado da Júlia">
-    <meta property="og:description" content="Produtos selecionados e entregues na sua casa com todo carinho.">
-    <meta property="og:image" content="https://seusite.com/imagem-240x240.jpg">
-    <meta property="og:image:width" content="240">
-    <meta property="og:image:height" content="240">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#2ecc71">
+    <link rel="icon" href="https://fav.farm/🛒" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --primaria: #2ecc71; /* Verde Mercado */
-            --escura: #2d3436;
-            --fundo: #f9f9f9;
-            --whatsapp: #25d366;
+            --primary: #6c5ce7;
+            --secondary: #00b894;
+            --accent: #fd79a8;
+            --danger: #d63031;
+            --bg: #fdf2f7;
+            --card-blue: #3498db;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background-color: var(--bg); 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--fundo);
-            color: var(--escura);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+        .loja-header { text-align: center; margin-bottom: 20px; }
+        .loja-header h1 { color: var(--accent); font-size: 2.2rem; margin: 0; text-shadow: 2px 2px 0px #fff; }
+
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 500px; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-sizing: border-box; 
         }
 
-        .card {
-            background: #ffffff;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-            padding-bottom: 30px;
+        h2 { color: var(--primary); margin-top: 0; font-size: 1.1rem; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; }
+        
+        .grid-input { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        input { padding: 12px; border: 2px solid #edf2f7; border-radius: 10px; font-size: 16px; width: 100%; box-sizing: border-box; outline: none; }
+        
+        .btn-save { 
+            background: var(--accent); color: white; padding: 15px; width: 100%; border: none; 
+            border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer;
+            box-shadow: 0 4px 0 #e84393;
         }
 
-        .header-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 30px auto 15px;
-            object-fit: cover;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 20px; }
+
+        .product-container { position: relative; }
+        
+        .product-btn { 
+            background: #fff; padding: 15px 5px; border-radius: 12px; cursor: pointer;
+            border: 2px solid #f1f2f6; display: flex; flex-direction: column; align-items: center;
+            transition: all 0.2s ease; width: 100%; box-sizing: border-box;
+        }
+        .product-btn:active { transform: scale(0.95); background: #e8f8f5; }
+
+        .remove-prod {
+            position: absolute; top: -5px; right: -5px; background: var(--danger);
+            color: white; border-radius: 50%; width: 22px; height: 22px;
+            font-size: 12px; border: 2px solid white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 10;
         }
 
-        h1 {
-            font-size: 1.5rem;
-            margin: 10px 0 5px;
-            color: var(--escura);
-        }
+        .receipt { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .receipt td { padding: 10px 5px; border-bottom: 1px dashed #dfe6e9; }
+        .btn-del-item { color: var(--danger); cursor: pointer; font-weight: bold; width: 30px; text-align: center; }
 
-        p {
-            font-size: 0.95rem;
-            color: #636e72;
-            padding: 0 30px;
-            margin-bottom: 25px;
-            line-height: 1.4;
+        .payment-area { background: #f8f9fa; border-radius: 15px; padding: 15px; margin-top: 20px; border-left: 5px solid var(--secondary); }
+        .row-money { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .row-money label { font-weight: bold; color: #444; font-size: 0.9rem; }
+        .row-money span { font-size: 1.3rem; font-weight: bold; color: #2d3436; }
+        .input-money { width: 100px; text-align: right; border: 2px solid var(--secondary); padding: 8px; border-radius: 8px; font-size: 1rem; font-weight: bold; }
+        
+        .btn-card {
+            background: var(--card-blue); color: white; width: 100%; padding: 12px; margin-top: 10px;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
+        .btn-card:disabled { background: #bdc3c7; cursor: not-allowed; }
 
-        .btn-whatsapp {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--whatsapp);
-            color: white;
-            text-decoration: none;
-            margin: 0 30px;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: transform 0.2s, background 0.2s;
-            gap: 10px;
-        }
-
-        .btn-whatsapp:active {
-            transform: scale(0.96);
-            background-color: #128c7e;
-        }
-
-        .footer-tag {
-            margin-top: 25px;
-            font-size: 0.75rem;
-            color: #b2bec3;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .btn-clear { background: var(--primary); color: white; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        #status-cartao { font-size: 0.85rem; text-align: center; margin-top: 8px; font-weight: bold; min-height: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <img src="https://seusite.com/imagem-240x240.jpg" alt="Logo Mercado da Júlia" class="header-img">
-        
-        <h1>Mercado da Júlia</h1>
-        <p>Frutas, verduras e legumes frescos selecionados especialmente para você.</p>
-
-        <a href="https://wa.me/SEUNUMEROAQUI" class="btn-whatsapp">
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path fill="currentColor" d="M12.04 2C6.5 2 2 6.5 2 12.04C2 13.81 2.46 15.54 3.34 17.06L2 22L7.1 20.66C8.55 21.45 10.21 21.87 12.04 21.87C17.5 21.87 22 17.4 22 11.96C22 9.33 20.97 6.85 19.1 4.95C17.22 3.05 14.73 2 12.04 2M12.04 3.66C14.32 3.66 16.44 4.55 18.04 6.15C19.64 7.75 20.5 9.87 20.5 12.15C20.5 16.71 16.71 20.5 12.15 20.5C10.6 20.5 9.15 20.07 7.91 19.34L7.62 19.17L4.5 20L5.33 17.03L5.14 16.73C4.31 15.41 3.87 13.88 3.87 12.31C3.87 7.75 7.66 3.96 12.22 3.96M9.13 7.82C8.91 7.82 8.54 7.9 8.24 8.24C7.94 8.58 7.08 9.38 7.08 11C7.08 12.63 8.27 14.21 8.44 14.44C8.6 14.66 10.74 18.15 14.13 19.45C14.93 19.76 15.55 19.96 16.03 20.12C16.84 20.37 17.58 20.33 18.17 20.24C18.82 20.15 20.18 19.42 20.46 18.63C20.74 17.84 20.74 17.16 20.66 17.03C20.57 16.9 20.35 16.82 20 16.66C19.65 16.5 18.15 15.75 17.87 15.65C17.59 15.55 17.39 15.5 17.19 15.8C16.97 16.1 16.37 16.81 16.19 17C16 17.21 15.81 17.24 15.46 17.08C15.11 16.91 13.97 16.54 12.62 15.33C11.57 14.39 10.86 13.23 10.66 12.89C10.46 12.54 10.64 12.36 10.81 12.19C10.96 12.04 11.14 11.8 11.32 11.59C11.5 11.37 11.56 11.23 11.68 11C11.8 10.74 11.74 10.53 11.65 10.36C11.56 10.2 10.84 8.42 10.54 7.71C10.25 7 9.95 7.1 9.73 7.09C9.53 7.08 9.32 7.08 9.13 7.08Z" />
-            </svg>
-            Fazer Pedido Agora
-        </a>
-
-        <div class="footer-tag">Atendimento das 08h às 18h</div>
+    <div class="loja-header">
+        <h1>🍓 Mercado da Júlia 🍭</h1>
     </div>
 
+    <div class="card">
+        <h2>📦 Abastecer Prateleiras</h2>
+        <div class="grid-input">
+            <input type="text" id="reg-nome" placeholder="Produto">
+            <input type="number" id="reg-preco" placeholder="Preço R$">
+        </div>
+        <button class="btn-save" onclick="cadastrarNoEstoque()">Colocar na Vitrine +</button>
+        <div class="shelf" id="prateleira"></div>
+    </div>
+
+    <div class="card">
+        <h2>💰 Cupom Fiscal</h2>
+        <table class="receipt">
+            <tbody id="carrinho-corpo"></tbody>
+        </table>
+        
+        <div class="payment-area">
+            <div class="row-money">
+                <label>TOTAL:</label>
+                <span id="total-venda">R$ 0.00</span>
+            </div>
+            <div class="row-money">
+                <label>RECEBIDO:</label>
+                <input type="number" id="pago" class="input-money" placeholder="0.00" oninput="calcularTroco()">
+            </div>
+            <div class="row-money" style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
+                <label>TROCO:</label>
+                <span id="troco-valor" style="color: var(--danger)">R$ 0.00</span>
+            </div>
+
+            <button id="btn-cartao" class="btn-card" onclick="pagarComCartao()">💳 Pagar com Cartão</button>
+            <div id="status-cartao"></div>
+        </div>
+
+        <button class="btn-clear" onclick="novaVenda()">Próximo Cliente 🛍️</button>
+    </div>
+
+    <script>
+        let totalGeral = 0;
+
+        // Função para gerar o som de "Beep" sem arquivos externos
+        function tocarBeep() {
+            try {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+
+                oscillator.type = "sine"; 
+                oscillator.frequency.value = 880; 
+                gainNode.gain.setValueAtTime(0.1, context.currentTime);
+
+                oscillator.start();
+                setTimeout(() => oscillator.stop(), 200);
+            } catch (e) {
+                console.log("Áudio não suportado ou bloqueado pelo navegador");
+            }
+        }
+
+        function pagarComCartao() {
+            if (totalGeral <= 0) {
+                alert("Júlia, o carrinho está vazio! 🛒");
+                return;
+            }
+
+            const btn = document.getElementById('btn-cartao');
+            const status = document.getElementById('status-cartao');
+
+            btn.disabled = true;
+            btn.innerText = "⏳ Processando...";
+            status.innerText = "Aproxime o cartão na maquininha...";
+            status.style.color = "#7f8c8d";
+
+            // Espera 5 segundos
+            setTimeout(() => {
+                tocarBeep(); 
+                
+                btn.innerText = "✅ Aprovado!";
+                btn.style.background = "var(--secondary)";
+                status.innerText = "Pagamento concluído com sucesso!";
+                status.style.color = "var(--secondary)";
+
+                // Reseta o botão após um tempo para a próxima venda
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerText = "💳 Pagar com Cartão";
+                    btn.style.background = "var(--card-blue)";
+                    status.innerText = "";
+                }, 3000);
+
+            }, 5000); 
+        }
+
+        function cadastrarNoEstoque() {
+            const nomeInput = document.getElementById('reg-nome');
+            const precoInput = document.getElementById('reg-preco');
+            const nome = nomeInput.value.trim();
+            const preco = parseFloat(precoInput.value);
+
+            if (!nome || isNaN(preco)) {
+                alert("Júlia, preencha o nome e o preço! 😊");
+                return;
+            }
+
+            const prateleira = document.getElementById('prateleira');
+            const container = document.createElement('div');
+            container.className = 'product-container';
+            
+            container.innerHTML = `
+                <button class="remove-prod" onclick="this.parentElement.remove()">X</button>
+                <div class="product-btn" onclick="adicionarAoCarrinho('${nome}', ${preco})">
+                    <strong>${nome}</strong>
+                    <span style="color:var(--secondary)">R$ ${preco.toFixed(2)}</span>
+                </div>
+            `;
+            
+            prateleira.appendChild(container);
+            nomeInput.value = ''; precoInput.value = ''; nomeInput.focus();
+        }
+
+        function adicionarAoCarrinho(nome, preco) {
+            const corpo = document.getElementById('carrinho-corpo');
+            const row = corpo.insertRow();
+            row.innerHTML = `
+                <td onclick="removerItemCarrinho(this, ${preco})" class="btn-del-item">✕</td>
+                <td style="width: 60%"><strong>${nome}</strong></td>
+                <td style="width: 40%; text-align: right;">R$ ${preco.toFixed(2)}</td>
+            `;
+            atualizarTotal(preco);
+        }
+
+        function removerItemCarrinho(celula, preco) {
+            celula.parentElement.remove();
+            atualizarTotal(-preco);
+        }
+
+        function atualizarTotal(valor) {
+            totalGeral += valor;
+            if (totalGeral < 0) totalGeral = 0;
+            document.getElementById('total-venda').innerText = `R$ ${totalGeral.toFixed(2)}`;
+            calcularTroco();
+        }
+
+        function calcularTroco() {
+            const pago = parseFloat(document.getElementById('pago').value) || 0;
+            const troco = pago - totalGeral;
+            const trocoDisplay = document.getElementById('troco-valor');
+            
+            if (pago > 0 && troco >= 0) {
+                trocoDisplay.innerText = `R$ ${troco.toFixed(2)}`;
+                trocoDisplay.style.color = "#00b894";
+            } else {
+                trocoDisplay.innerText = `R$ 0.00`;
+                trocoDisplay.style.color = "#d63031";
+            }
+        }
+
+        function novaVenda() {
+            if(confirm("Deseja limpar o cupom para o próximo cliente?")) {
+                document.getElementById('carrinho-corpo').innerHTML = '';
+                document.getElementById('pago').value = '';
+                totalGeral = 0;
+                document.getElementById('total-venda').innerText = 'R$ 0.00';
+                document.getElementById('troco-valor').innerText = 'R$ 0.00';
+                document.getElementById('status-cartao').innerText = '';
+            }
+        }
+    </script>
 </body>
 </html>
