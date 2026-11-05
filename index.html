@@ -39,8 +39,27 @@
             align-items: center; 
         }
 
-        .loja-header { text-align: center; margin-bottom: 20px; }
+        .loja-header { text-align: center; margin-bottom: 10px; }
         .loja-header h1 { color: var(--accent); font-size: 2.2rem; margin: 0; text-shadow: 2px 2px 0px #fff; }
+
+        /* Estilo do botão de instalação */
+        .btn-instalar-app {
+            display: none; /* Fica oculto por padrão até o navegador permitir */
+            background: var(--secondary);
+            color: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+            transition: transform 0.2s;
+        }
+        .btn-instalar-app:active { transform: scale(0.98); }
 
         .card { 
             background: white; 
@@ -105,9 +124,13 @@
 </head>
 <body>
 
+    <!-- Cabeçalho / Menu -->
     <div class="loja-header">
-        <h1>🍓 Mercado da Júlia 🍭</h1>
+        <h1>🍓 Mercado da Júlia 🛒</h1>
     </div>
+
+    <!-- Botão de Instalação (Fica logo abaixo do menu e só aparece se não estiver instalado) -->
+    <button id="btn-instalar-app" class="btn-instalar-app">📱 Instalar Mercado da Júlia</button>
 
     <div class="card">
         <h2>📦 Abastecer Prateleiras</h2>
@@ -155,6 +178,34 @@
                     .catch((err) => console.log('Falha ao registrar Service Worker:', err));
             });
         }
+
+        // Lógica do Botão de Instalação PWA
+        let deferredPrompt;
+        const btnInstalarApp = document.getElementById('btn-instalar-app');
+
+        if (!(window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true)) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                btnInstalarApp.style.display = 'block'; // Mostra o botão logo abaixo do menu
+            });
+        }
+
+        btnInstalarApp.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('O usuário aceitou instalar o app!');
+            }
+            deferredPrompt = null;
+            btnInstalarApp.style.display = 'none';
+        });
+
+        window.addEventListener('appinstalled', () => {
+            btnInstalarApp.style.display = 'none';
+            console.log('Aplicativo instalado com sucesso!');
+        });
 
         let totalGeral = 0;
 
